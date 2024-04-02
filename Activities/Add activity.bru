@@ -1,0 +1,73 @@
+meta {
+  name: Add activity
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/activities
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "{{Id}}",
+    "title": "test add",
+    "dueDate": "{{dueDate}}",
+    "completed": true
+  }
+}
+
+vars:post-response {
+  postId: res.body.id
+  postTitle: res.body.title
+  postDueDate: res.body.dueDate
+  postCompleted: res.body.completed
+}
+
+assert {
+  res.body.id: isNumber postId
+  res.body.title: isString postTitle
+  res.body.dueDate: isString
+  res.body.completed: isBoolean
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  const id = faker.number.int(100);
+  const date = faker.date.past();
+  let dateISO = date.toISOString();
+  
+  bru.setVar("Id", id);
+  bru.setVar("dueDate", dateISO);
+}
+
+tests {
+  var jsonData = res.getBody();
+  let headers = res.getHeader('content-type');
+  
+  let id = bru.getVar("postId");
+  let title = bru.getVar("postTitle");
+  let dueDate = bru.getVar("postDueDate");
+  let completed = bru.getVar("postCompleted");
+  
+  test("The response is JSON", function() {
+    expect(headers).to.is.include("json");
+    });
+  
+  let status = res.getStatus();
+  if(status == 200){
+      test("The response return with the expected values",function(){
+            expect(jsonData.id).to.equal(id)
+            expect(jsonData.title).to.equal(title)
+            expect(jsonData.dueDate).to.equal(dueDate)
+            expect(jsonData.completed).to.equal(completed)
+      })
+  }
+  
+  const date = new Date();
+  
+  console.log("test"+date)
+}

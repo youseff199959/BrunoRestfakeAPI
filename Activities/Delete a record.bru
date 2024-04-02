@@ -1,0 +1,17 @@
+meta {
+  name: Delete a record
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/activities/5
+  body: none
+  auth: none
+}
+
+tests {
+  test("Deleted successfully", function () {
+      expect(res.getStatus()).equal(200)
+  });
+}

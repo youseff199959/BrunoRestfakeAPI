@@ -1,0 +1,20 @@
+script:pre-request {
+  var key_stroke = { 'heart': Array('\u2665') };
+  console.log(key_stroke.heart[0])
+  
+  
+}
+
+script:post-response {
+  var key_stroke = { 'heart': Array('\u2665') };
+  console.log(key_stroke.heart[0])
+  
+  
+}
+
+tests {
+  test("The required environment has been seleted", function() {
+    const data = res.getBody();
+    expect(bru.getEnvVar("base_url")).to.equal("https://fakerestapi.azurewebsites.net/api/v1");
+  });
+}

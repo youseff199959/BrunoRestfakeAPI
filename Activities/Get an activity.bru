@@ -1,0 +1,43 @@
+meta {
+  name: Get an activity
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/Activities/1
+  body: none
+  auth: none
+}
+
+tests {
+  var jsonData = res.getBody();
+  let headers = res.getHeader('content-type');
+  let counter=0;
+  
+  test("The response is JSON", function() {
+    expect(headers).to.is.include("json");
+  });
+  
+  let status = res.getStatus();
+  if(status == 200){
+      test("The response is array", function() {
+        expect(jsonData).to.be.a('object');
+          })
+    
+      test(`Response match the required schema`, function() {
+              expect(jsonData).to.have.property("id")
+              expect(jsonData).to.have.property("title")
+              expect(jsonData).to.have.property("dueDate")
+              expect(jsonData).to.have.property("completed")
+      })
+      test(`The object has the required value`,function(){
+            expect(jsonData.id).to.be.a('number')
+            expect(jsonData.title).to.be.a('string')
+            expect(jsonData.dueDate).to.include('+00:00')
+            expect(jsonData.completed).to.be.a('boolean')
+      })
+  }
+  
+  
+}

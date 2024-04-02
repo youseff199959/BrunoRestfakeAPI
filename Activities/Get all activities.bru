@@ -1,0 +1,51 @@
+meta {
+  name: Get all activities
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/Activities
+  body: none
+  auth: none
+}
+
+tests {
+  var jsonData = res.getBody();
+  let headers = res.getHeader('content-type');
+  let counter=0;
+  
+  test("The response is JSON", function() {
+    expect(headers).to.is.include("json");
+  });
+  
+  let status = res.getStatus();
+  if(jsonData.length > 0 && status == 200){
+      test("The response is array", function() {
+        expect(jsonData).to.be.a('array');
+          })
+    
+      test(`Response match the required schema`, function() {
+        jsonData.forEach(
+         function(activities) {
+              expect(activities).to.have.property("idd")
+              expect(activities).to.have.property("title")
+              expect(activities).to.have.property("dueDate")
+              expect(activities).to.have.property("completed")
+          }
+        )
+      })
+    
+    jsonData.forEach(function (activities){
+      counter++;
+      test(`The object ${counter} keys has the required value`,function(){
+            expect(activities.id).to.be.a('number')
+            expect(activities.title).to.be.a('string')
+            expect(activities.dueDate).to.include('+00:00')
+            expect(activities.completed).to.be.a('boolean')
+      })
+    })
+  }
+  
+  
+}
