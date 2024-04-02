@@ -27,7 +27,7 @@ vars:post-response {
 }
 
 assert {
-  res.body.id: isBoolean 
+  res.body.id: isNumber 
   res.body.title: isString postTitle
   res.body.dueDate: isString
   res.body.completed: isBoolean

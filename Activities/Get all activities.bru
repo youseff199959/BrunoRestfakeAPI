@@ -28,7 +28,7 @@ tests {
       test(`Response match the required schema`, function() {
         jsonData.forEach(
          function(activities) {
-              expect(activities).to.have.property("idd")
+              expect(activities).to.have.property("id")
               expect(activities).to.have.property("title")
               expect(activities).to.have.property("dueDate")
               expect(activities).to.have.property("completed")
