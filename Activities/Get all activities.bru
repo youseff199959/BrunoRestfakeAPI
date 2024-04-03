@@ -13,7 +13,7 @@ get {
 tests {
   var jsonData = res.getBody();
   let headers = res.getHeader('content-type');
-  let counter=0;
+  let counter=00;
   
   test("The response is JSON", function() {
     expect(headers).to.is.include("json");
